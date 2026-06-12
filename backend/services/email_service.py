@@ -9,6 +9,8 @@ Supports:
 4. Dev Mode (Saves mock emails to files and reports success)
 """
 
+import socket
+from contextlib import contextmanager
 import logging
 import smtplib
 from datetime import datetime, timezone
@@ -184,6 +186,31 @@ def _send_via_sendgrid(to_email: str, subject: str, html_body: str, text_body: s
         return {"success": False, "error": str(e)}
 
 
+@contextmanager
+def force_ipv4_for_host(hostname: str):
+    """
+    Temporarily force socket.getaddrinfo to resolve a specific hostname
+    using IPv4 (AF_INET) only to bypass IPv6 DNS/routing handshaking issues.
+    """
+    original_getaddrinfo = socket.getaddrinfo
+
+    def forced_getaddrinfo(*args, **kwargs):
+        if args and args[0] == hostname:
+            new_args = list(args)
+            if len(new_args) > 2:
+                new_args[2] = socket.AF_INET
+            else:
+                new_args.extend([0, socket.AF_INET])
+            return original_getaddrinfo(*new_args, **kwargs)
+        return original_getaddrinfo(*args, **kwargs)
+
+    socket.getaddrinfo = forced_getaddrinfo
+    try:
+        yield
+    finally:
+        socket.getaddrinfo = original_getaddrinfo
+
+
 def send_email(
     to_email: str,
     subject: str,
@@ -228,17 +255,18 @@ def send_email(
     msg.attach(MIMEText(html_body, "html", "utf-8"))
 
     try:
-        if settings.smtp_port == 465:
-            server = smtplib.SMTP_SSL(settings.smtp_host, settings.smtp_port, timeout=25.0)
-            server.ehlo()
-        else:
-            server = smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=25.0)
-            # Identify our client to the mail server first
-            server.ehlo()
-            if settings.smtp_use_tls:
-                server.starttls()
-                # Re-negotiate capabilities over the TLS channel
+        with force_ipv4_for_host(settings.smtp_host):
+            if settings.smtp_port == 465:
+                server = smtplib.SMTP_SSL(settings.smtp_host, settings.smtp_port, timeout=25.0)
                 server.ehlo()
+            else:
+                server = smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=25.0)
+                # Identify our client to the mail server first
+                server.ehlo()
+                if settings.smtp_use_tls:
+                    server.starttls()
+                    # Re-negotiate capabilities over the TLS channel
+                    server.ehlo()
 
         if settings.smtp_username and settings.smtp_password:
             server.login(settings.smtp_username, settings.smtp_password)
