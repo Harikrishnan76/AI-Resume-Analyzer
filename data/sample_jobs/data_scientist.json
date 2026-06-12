@@ -1,0 +1,7 @@
+{
+  "title": "Data Scientist — Machine Learning",
+  "description": "Join our data science team to develop and deploy machine learning models that drive product decisions. You will analyze large datasets, build predictive models, create data pipelines, and present findings to stakeholders. The ideal candidate has strong foundations in statistics, experience with Python ML libraries (scikit-learn, TensorFlow/PyTorch), and SQL proficiency. You'll work on recommendation systems, NLP features, and A/B testing frameworks. Experience with MLOps (MLflow, Kubeflow), big data tools (Spark), and cloud ML platforms is highly valued.",
+  "required_skills": ["Python", "Machine Learning", "SQL", "Pandas", "Scikit-learn", "Statistics"],
+  "preferred_skills": ["TensorFlow", "PyTorch", "Spark", "NLP", "Docker", "MLflow"],
+  "experience_level": "mid"
+}

@@ -1,0 +1,7 @@
+{
+  "title": "Senior Python Backend Developer",
+  "description": "We are looking for an experienced Python developer to join our engineering team. You will design and implement scalable microservices, build REST APIs, and work closely with data engineering and DevOps teams. The ideal candidate has strong experience with FastAPI or Django, SQL databases, Docker, and CI/CD pipelines. You'll be responsible for architecting backend systems that handle millions of requests per day, writing comprehensive tests, and mentoring junior developers. Experience with cloud platforms (AWS/GCP), message queues (RabbitMQ/Kafka), and observability tools (Prometheus/Grafana) is a plus.",
+  "required_skills": ["Python", "FastAPI", "SQL", "Docker", "REST API", "Git"],
+  "preferred_skills": ["AWS", "Kubernetes", "Redis", "PostgreSQL", "CI/CD", "Kafka"],
+  "experience_level": "senior"
+}

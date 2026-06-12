@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>You've Been Shortlisted!</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f7fa;font-family:'Segoe UI',Roboto,Arial,sans-serif;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f7fa;padding:40px 0;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="background-color:#ffffff;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.08);overflow:hidden;">
+          
+          <!-- Header -->
+          <tr>
+            <td style="background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:40px 40px 30px;text-align:center;">
+              <div style="font-size:48px;margin-bottom:12px;">🎉</div>
+              <h1 style="color:#ffffff;font-size:24px;margin:0;font-weight:700;">
+                Congratulations, {{ candidate_name }}!
+              </h1>
+              <p style="color:#e0d4ff;font-size:14px;margin:8px 0 0;">
+                Your application has been shortlisted
+              </p>
+            </td>
+          </tr>
+
+          <!-- Body -->
+          <tr>
+            <td style="padding:40px;">
+              <p style="color:#374151;font-size:16px;line-height:1.6;margin:0 0 20px;">
+                We are excited to inform you that after a thorough review of your qualifications,
+                your application for <strong style="color:#4f46e5;">{{ job_title }}</strong> has been
+                <strong>shortlisted</strong> for the next stage.
+              </p>
+
+              {% if score %}
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;">
+                <tr>
+                  <td style="background-color:#f0fdf4;border-left:4px solid #22c55e;border-radius:8px;padding:20px;">
+                    <p style="color:#166534;font-size:14px;margin:0;">
+                      <strong>Match Score:</strong> {{ score }}% — Your profile aligns strongly with our requirements.
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              {% endif %}
+
+              {% if custom_message %}
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="margin:24px 0;">
+                <tr>
+                  <td style="background-color:#f8fafc;border-radius:8px;padding:20px;">
+                    <p style="color:#64748b;font-size:12px;text-transform:uppercase;letter-spacing:0.5px;margin:0 0 8px;">
+                      Message from the hiring team
+                    </p>
+                    <p style="color:#334155;font-size:14px;line-height:1.5;margin:0;font-style:italic;">
+                      "{{ custom_message }}"
+                    </p>
+                  </td>
+                </tr>
+              </table>
+              {% endif %}
+
+              <h3 style="color:#1f2937;font-size:16px;margin:28px 0 12px;">What's Next?</h3>
+              <table role="presentation" cellpadding="0" cellspacing="0" style="margin-bottom:24px;">
+                <tr>
+                  <td style="padding:6px 0;color:#6b7280;font-size:14px;">
+                    <span style="color:#4f46e5;font-weight:bold;margin-right:8px;">1.</span>
+                    Our team will reach out to schedule the next interview round.
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:6px 0;color:#6b7280;font-size:14px;">
+                    <span style="color:#4f46e5;font-weight:bold;margin-right:8px;">2.</span>
+                    Please keep your contact information up to date.
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:6px 0;color:#6b7280;font-size:14px;">
+                    <span style="color:#4f46e5;font-weight:bold;margin-right:8px;">3.</span>
+                    Prepare any portfolio or references you'd like to share.
+                  </td>
+                </tr>
+              </table>
+
+              <p style="color:#374151;font-size:14px;line-height:1.6;margin:0;">
+                We look forward to speaking with you soon!
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color:#f8fafc;padding:24px 40px;border-top:1px solid #e5e7eb;">
+              <p style="color:#9ca3af;font-size:12px;margin:0;text-align:center;">
+                {{ company_name }} Recruiting Team · © {{ year }}<br>
+                This is an automated message from our hiring system.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
