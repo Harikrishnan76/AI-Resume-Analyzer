@@ -4,6 +4,7 @@ AI Resume Analyzer — Emails Router
 Trigger templated emails to candidates, view email logs.
 """
 
+import asyncio
 import logging
 from datetime import datetime, timezone
 
@@ -50,6 +51,10 @@ async def send_emails(
     failed_count = 0
     email_logs = []
 
+    # Prepare arguments and fetch scores concurrently
+    tasks = []
+    task_metadata = []
+
     for cid in data.candidate_ids:
         candidate = candidates.get(cid)
         if not candidate:
@@ -66,8 +71,9 @@ async def send_emails(
         score_record = score_result.scalar_one_or_none()
         candidate_score = score_record.overall_score if score_record else None
 
-        # Send email
-        result = send_candidate_email(
+        # Schedule email sending task in a separate worker thread (non-blocking)
+        task = asyncio.to_thread(
+            send_candidate_email,
             template_name=data.template,
             candidate_name=candidate.full_name,
             candidate_email=candidate.email,
@@ -75,8 +81,17 @@ async def send_emails(
             custom_message=data.custom_message,
             score=candidate_score,
         )
+        tasks.append(task)
+        task_metadata.append((candidate, candidate_score))
 
-        # Log the email
+    # Execute all email sends in parallel!
+    if tasks:
+        results = await asyncio.gather(*tasks)
+    else:
+        results = []
+
+    # Process and log results
+    for (candidate, candidate_score), result in zip(task_metadata, results):
         email_log = EmailLog(
             candidate_id=candidate.id,
             job_id=job.id,

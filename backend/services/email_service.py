@@ -229,10 +229,10 @@ def send_email(
 
     try:
         if settings.smtp_port == 465:
-            server = smtplib.SMTP_SSL(settings.smtp_host, settings.smtp_port, timeout=12.0)
+            server = smtplib.SMTP_SSL(settings.smtp_host, settings.smtp_port, timeout=25.0)
             server.ehlo()
         else:
-            server = smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=12.0)
+            server = smtplib.SMTP(settings.smtp_host, settings.smtp_port, timeout=25.0)
             # Identify our client to the mail server first
             server.ehlo()
             if settings.smtp_use_tls:
