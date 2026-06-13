@@ -108,7 +108,7 @@ def show_sidebar():
     user = get_user()
 
     with st.sidebar:
-        st.markdown("### 📄 AI Resume Analyzer")
+        st.markdown("### 📄 CIT AI Resume Analyzer")
         st.markdown("---")
 
         # User info
@@ -152,7 +152,7 @@ def show_home():
     """Show home page based on role with getting started guide."""
     st.markdown("""
     <div class="hero-header">
-        <h1>📄 AI Resume Analyzer</h1>
+        <h1>📄 CIT AI Resume Analyzer</h1>
         <p>Smart resume screening and shortlisting powered by AI</p>
     </div>
     """, unsafe_allow_html=True)

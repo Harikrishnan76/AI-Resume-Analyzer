@@ -65,12 +65,13 @@ app.add_middleware(
 )
 
 # ── Mount routers ──
-from backend.routers import candidates, jobs, scoring, emails  # noqa: E402
+from backend.routers import candidates, jobs, scoring, emails, analysis  # noqa: E402
 
 app.include_router(candidates.router, prefix="/api", tags=["Candidates & Resumes"])
 app.include_router(jobs.router, prefix="/api", tags=["Jobs"])
 app.include_router(scoring.router, prefix="/api", tags=["Scoring"])
 app.include_router(emails.router, prefix="/api", tags=["Emails"])
+app.include_router(analysis.router, prefix="/api", tags=["Analysis"])
 
 
 # ── Health check ──

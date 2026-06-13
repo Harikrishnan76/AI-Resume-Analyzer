@@ -53,6 +53,7 @@ class CandidateResponse(BaseModel):
     full_name: str
     email: str
     phone: Optional[str] = None
+    extracted_text: Optional[str] = None
     extracted_skills: Optional[list] = None
     extracted_experience: Optional[dict | list] = None
     extracted_education: Optional[list] = None
@@ -219,3 +220,67 @@ class EmailSendResponse(BaseModel):
     sent: int
     failed: int
     details: list[EmailLogResponse]
+
+
+# ──────────────────────────────────────────────
+# Analysis Schemas
+# ──────────────────────────────────────────────
+
+class WeakSectionItem(BaseModel):
+    section: str
+    issue: str
+    suggestion: str
+
+
+class ProposedVerbItem(BaseModel):
+    original: str
+    replacement: str
+    context: str
+
+
+class ExampleTransformationItem(BaseModel):
+    input: str
+    improved: str
+
+
+class ResumeImprovementResponse(BaseModel):
+    weak_sections: list[WeakSectionItem]
+    proposed_verbs: list[ProposedVerbItem]
+    formatting_suggestions: list[str]
+    ats_compatibility: list[str]
+    example_transformations: list[ExampleTransformationItem]
+    improved_resume: str
+
+
+class AnalysisEvaluateRequest(BaseModel):
+    job_id: int
+
+
+class SkillGapResponse(BaseModel):
+    required_skills: list[str]
+    preferred_skills: list[str]
+    candidate_skills: list[str]
+    matched_required: list[str]
+    missing_required: list[str]
+    matched_preferred: list[str]
+    missing_preferred: list[str]
+    missing_skills: list[str]
+
+
+class ATSScoreResponse(BaseModel):
+    overall_score: float
+    keyword_score: float
+    formatting_score: float
+    skills_score: float
+    experience_score: float
+    experience_years: float
+    required_experience_level: Optional[str] = None
+    formatting_issues_count: int
+
+
+class EvaluationResponse(BaseModel):
+    job_id: int
+    job_title: str
+    skill_gap: SkillGapResponse
+    ats_score: ATSScoreResponse
+
