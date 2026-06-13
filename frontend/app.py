@@ -17,7 +17,7 @@ from frontend.styles import get_global_css
 
 # ── Page Config ──
 st.set_page_config(
-    page_title="AI Resume Analyzer",
+    page_title="CIT AI Resume Analyzer",
     page_icon="📄",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -31,7 +31,7 @@ def show_auth_page():
     """Display login/register forms with premium styling."""
     st.markdown("""
     <div class="hero-header" style="text-align:center;">
-        <h1>📄 AI Resume Analyzer</h1>
+        <h1>📄 CIT AI Resume Analyzer</h1>
         <p>Smart resume screening powered by AI — upload, analyze, and shortlist in seconds</p>
     </div>
     """, unsafe_allow_html=True)
@@ -140,6 +140,8 @@ def show_sidebar():
         if st.button("🚪 Logout", use_container_width=True):
             logout()
             st.rerun()
+
+
 
         # Footer in sidebar
         st.markdown("---")
@@ -272,7 +274,6 @@ def show_home():
     """, unsafe_allow_html=True)
 
 
-# ── Main Flow ──
 if not is_logged_in():
     show_auth_page()
 else:

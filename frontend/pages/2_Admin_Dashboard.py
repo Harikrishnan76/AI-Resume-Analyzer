@@ -59,6 +59,8 @@ with st.sidebar:
         logout()
         st.rerun()
 
+
+
 # ── Header ──
 st.markdown("""
 <div class="hero-header" style="background:linear-gradient(135deg, rgba(15,23,42,0.95), rgba(30,41,59,0.95));">

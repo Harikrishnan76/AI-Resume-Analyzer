@@ -50,6 +50,8 @@ with st.sidebar:
         logout()
         st.rerun()
 
+
+
 # ── Header ──
 st.markdown("""
 <div class="hero-header">
