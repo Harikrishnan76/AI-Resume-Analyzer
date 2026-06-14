@@ -1,7 +1,7 @@
 """
 AI Resume Analyzer — LLM-Assisted Extraction Service
 
-Uses OpenAI (or compatible) API for enhanced structured extraction
+Uses Google Gemini API for enhanced structured extraction
 from resume text. Falls back to traditional parsing when unavailable.
 """
 
@@ -58,7 +58,7 @@ Resume text:
 
 async def extract_with_llm(raw_text: str) -> Optional[dict]:
     """
-    Use OpenAI API to extract structured data from resume text.
+    Use Google Gemini API to extract structured data from resume text.
 
     Returns structured dict on success, None on failure.
     Caller should fall back to traditional extraction on None.
@@ -72,31 +72,27 @@ async def extract_with_llm(raw_text: str) -> Optional[dict]:
         return None
 
     try:
-        from openai import AsyncOpenAI
+        from google import genai
 
-        client = AsyncOpenAI(api_key=settings.openai_api_key)
+        client = genai.Client(api_key=settings.gemini_api_key)
 
         # Truncate very long resumes to stay within token limits
         truncated_text = raw_text[:8000] if len(raw_text) > 8000 else raw_text
 
-        response = await client.chat.completions.create(
-            model=settings.openai_model,
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a precise resume parser. Always respond with valid JSON only.",
-                },
-                {
-                    "role": "user",
-                    "content": EXTRACTION_PROMPT.format(resume_text=truncated_text),
-                },
-            ],
-            temperature=0.1,
-            max_tokens=2000,
-            response_format={"type": "json_object"},
+        prompt = ("You are a precise resume parser. Always respond with valid JSON only.\n\n"
+                  + EXTRACTION_PROMPT.format(resume_text=truncated_text))
+
+        response = await client.aio.models.generate_content(
+            model=settings.gemini_model,
+            contents=prompt,
+            config=genai.types.GenerateContentConfig(
+                temperature=0.1,
+                max_output_tokens=2000,
+                response_mime_type="application/json",
+            ),
         )
 
-        result_text = response.choices[0].message.content
+        result_text = response.text
         result = json.loads(result_text)
 
         logger.info(
@@ -110,7 +106,7 @@ async def extract_with_llm(raw_text: str) -> Optional[dict]:
         logger.error("LLM returned invalid JSON: %s", e)
         return None
     except ImportError:
-        logger.error("openai package not installed")
+        logger.error("google-genai package not installed")
         return None
     except Exception as e:
         logger.error("LLM extraction failed: %s", e)

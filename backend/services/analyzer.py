@@ -5,7 +5,7 @@ Handles:
 1) AI Resume Improvement Suggestions (weak sections, action verbs, formatting, ATS compatibility, transformations).
 2) Skill Gap Analysis (required, candidate, missing skills).
 3) ATS Scoring (Keyword match, Formatting, Skills, Experience, overall score).
-Supports OpenAI LLM analysis with a robust rule-based fallback.
+Supports Google Gemini LLM analysis with a robust rule-based fallback.
 """
 
 import logging
@@ -99,42 +99,38 @@ async def analyze_resume_improvement(
 ) -> Dict[str, Any]:
     """
     Generate AI Resume Improvement Suggestions.
-    Uses OpenAI LLM if available; falls back to rule-based heuristics.
+    Uses Gemini LLM if available; falls back to rule-based heuristics.
     """
     if not resume_text or len(resume_text.strip()) < 50:
         return _get_fallback_improvement_suggestions(resume_text, job_description)
 
     if settings.llm_enabled:
         try:
-            from openai import AsyncOpenAI
-            client = AsyncOpenAI(api_key=settings.openai_api_key)
+            from google import genai
+            client = genai.Client(api_key=settings.gemini_api_key)
 
             job_desc_str = job_description or "None provided (General critique)"
             # Truncate inputs to stay safe on tokens
             trunc_resume = resume_text[:8000]
             trunc_job = job_desc_str[:4000]
 
-            response = await client.chat.completions.create(
-                model=settings.openai_model,
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "You are a professional ATS resume optimizer. Respond with valid JSON only.",
-                    },
-                    {
-                        "role": "user",
-                        "content": ANALYSIS_PROMPT_TEMPLATE.format(
-                            resume_text=trunc_resume,
-                            job_description=trunc_job
-                        ),
-                    },
-                ],
-                temperature=0.2,
-                max_tokens=2500,
-                response_format={"type": "json_object"},
+            prompt = ("You are a professional ATS resume optimizer. Respond with valid JSON only.\n\n"
+                      + ANALYSIS_PROMPT_TEMPLATE.format(
+                          resume_text=trunc_resume,
+                          job_description=trunc_job
+                      ))
+
+            response = await client.aio.models.generate_content(
+                model=settings.gemini_model,
+                contents=prompt,
+                config=genai.types.GenerateContentConfig(
+                    temperature=0.2,
+                    max_output_tokens=2500,
+                    response_mime_type="application/json",
+                ),
             )
 
-            result_text = response.choices[0].message.content
+            result_text = response.text
             result = json.loads(result_text)
             logger.info("Successfully analyzed resume using LLM")
             return result

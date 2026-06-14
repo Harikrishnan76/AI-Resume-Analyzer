@@ -34,7 +34,7 @@ async def lifespan(app: FastAPI):
     logger.info("📁 Upload directory: %s", settings.upload_path.resolve())
 
     if settings.llm_enabled:
-        logger.info("🤖 LLM-assisted extraction: ENABLED (model: %s)", settings.openai_model)
+        logger.info("🤖 LLM-assisted extraction: ENABLED (model: %s)", settings.gemini_model)
     else:
         logger.info("🤖 LLM-assisted extraction: DISABLED (no API key)")
 

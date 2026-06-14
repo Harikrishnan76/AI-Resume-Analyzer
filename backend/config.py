@@ -50,9 +50,9 @@ class Settings(BaseSettings):
     resend_api_key: str = ""
     sendgrid_api_key: str = ""
 
-    # ── OpenAI (optional) ──
-    openai_api_key: str = ""
-    openai_model: str = "gpt-4o-mini"
+    # ── Gemini (optional) ──
+    gemini_api_key: str = ""
+    gemini_model: str = "gemini-2.0-flash"
 
     # ── Scoring ──
     score_weight_keyword: float = 0.40
@@ -71,7 +71,7 @@ class Settings(BaseSettings):
     @property
     def llm_enabled(self) -> bool:
         """Whether LLM-assisted extraction is available."""
-        return bool(self.openai_api_key and self.openai_api_key.strip())
+        return bool(self.gemini_api_key and self.gemini_api_key.strip())
 
     @property
     def email_dev_mode(self) -> bool:
