@@ -31,7 +31,7 @@ def show_auth_page():
     """Display login/register forms with premium styling."""
     st.markdown("""
     <div class="hero-header" style="text-align:center;">
-        <h1>📄 CIT AI Resume Analyzer</h1>
+        <h1> CIT AI Resume Analyzer</h1>
         <p>Smart resume screening powered by AI — upload, analyze, and shortlist in seconds</p>
     </div>
     """, unsafe_allow_html=True)
@@ -45,13 +45,13 @@ def show_auth_page():
             if health:
                 llm_active = health.get("llm_enabled", False)
                 if llm_active:
-                    st.markdown('<span class="llm-status active">🤖 LLM Extraction: Active</span>', unsafe_allow_html=True)
+                    st.markdown('<span class="llm-status active">LLM Extraction: Active</span>', unsafe_allow_html=True)
                 else:
-                    st.markdown('<span class="llm-status inactive">⚙️ LLM: Traditional Mode</span>', unsafe_allow_html=True)
+                    st.markdown('<span class="llm-status inactive"> LLM: Traditional Mode</span>', unsafe_allow_html=True)
         except Exception:
             pass
 
-    tab_login, tab_register = st.tabs(["🔑 Login", "📝 Register"])
+    tab_login, tab_register = st.tabs([" Login", " Register"])
 
     with tab_login:
         with st.form("login_form"):
@@ -83,24 +83,24 @@ def show_auth_page():
             reg_role = st.selectbox(
                 "I am a...",
                 ["candidate", "admin"],
-                format_func=lambda x: "📋 Candidate — Upload resumes & view scores" if x == "candidate" else "👔 Recruiter / Admin — Manage jobs & shortlists",
+                format_func=lambda x: " Candidate — Upload resumes & view scores" if x == "candidate" else " Recruiter / Admin — Manage jobs & shortlists",
             )
 
             submitted = st.form_submit_button("Create Account", use_container_width=True, type="primary")
 
             if submitted:
                 if not all([reg_name, reg_username, reg_email, reg_password]):
-                    st.warning("⚠️ Please fill in all fields to create your account")
+                    st.warning("Please fill in all fields to create your account")
                 elif len(reg_password) < 6:
-                    st.warning("🔒 Password must be at least 6 characters for security")
+                    st.warning(" Password must be at least 6 characters for security")
                 elif "@" not in reg_email:
-                    st.warning("📧 Please enter a valid email address")
+                    st.warning("Please enter a valid email address")
                 else:
-                    with st.spinner("📝 Creating your account..."):
+                    with st.spinner(" Creating your account..."):
                         if register(reg_username, reg_email, reg_password, reg_role, reg_name):
-                            st.success("✅ Account created successfully! You can now log in.")
+                            st.success(" Account created successfully! You can now log in.")
                         else:
-                            st.error("❌ Registration failed. Username or email may already exist.")
+                            st.error("Registration failed. Username or email may already exist.")
 
 
 def show_sidebar():
@@ -108,11 +108,11 @@ def show_sidebar():
     user = get_user()
 
     with st.sidebar:
-        st.markdown("### 📄 CIT AI Resume Analyzer")
+        st.markdown("### CIT AI Resume Analyzer")
         st.markdown("---")
 
         # User info
-        role_icon = "👔" if is_admin() else "📋"
+        role_icon = " " if is_admin() else " "
         role_name = "Admin / Recruiter" if is_admin() else "Candidate"
         st.markdown(f"**{role_icon} {user.get('username', 'User')}**")
         st.caption(f"Role: {role_name}")
@@ -120,24 +120,24 @@ def show_sidebar():
 
         # Navigation hints
         if is_admin():
-            st.markdown("#### 🧭 Quick Navigation")
+            st.markdown("#### Quick Navigation")
             st.markdown("""
-            - 👔 **Admin Dashboard** — Jobs, scoring, emails
-            - 👥 **Candidates** — View all applicants
-            - 🎯 **Scoring** — Run AI scoring
-            - 📧 **Emails** — Send notifications
+            - **Admin Dashboard** — Jobs, scoring, emails
+            - **Candidates** — View all applicants
+            - **Scoring** — Run AI scoring
+            - **Emails** — Send notifications
             """)
         else:
-            st.markdown("#### 🧭 Quick Navigation")
+            st.markdown("####  Quick Navigation")
             st.markdown("""
-            - 📤 **Upload Resume** — PDF or DOCX
-            - 👤 **My Profile** — View extracted data
-            - 💼 **Open Jobs** — Browse positions
+            -  **Upload Resume** — PDF or DOCX
+            -  **My Profile** — View extracted data
+            -  **Open Jobs** — Browse positions
             """)
 
         st.markdown("---")
 
-        if st.button("🚪 Logout", use_container_width=True):
+        if st.button(" Logout", use_container_width=True):
             logout()
             st.rerun()
 
@@ -152,7 +152,7 @@ def show_home():
     """Show home page based on role with getting started guide."""
     st.markdown("""
     <div class="hero-header">
-        <h1>📄 CIT AI Resume Analyzer</h1>
+        <h1> CIT AI Resume Analyzer</h1>
         <p>Smart resume screening and shortlisting powered by AI</p>
     </div>
     """, unsafe_allow_html=True)
@@ -160,27 +160,27 @@ def show_home():
     user = get_user()
 
     if is_admin():
-        st.info("👔 **Welcome, Admin!** — Use the sidebar to navigate to the **Admin Dashboard** to manage jobs, run scoring, and send emails.")
+        st.info(" **Welcome, Admin!** — Use the sidebar to navigate to the **Admin Dashboard** to manage jobs, run scoring, and send emails.")
 
         col1, col2, col3 = st.columns(3)
         with col1:
             st.markdown("""
             <div class="metric-card">
-                <h3>📋 Job Descriptions</h3>
+                <h3> Job Descriptions</h3>
                 <p>Create and manage job postings with required skills and experience levels</p>
             </div>
             """, unsafe_allow_html=True)
         with col2:
             st.markdown("""
             <div class="metric-card">
-                <h3>🎯 AI Scoring Engine</h3>
+                <h3>AI Scoring Engine</h3>
                 <p>Run hybrid scoring: keywords + semantic embeddings + rule-based matching</p>
             </div>
             """, unsafe_allow_html=True)
         with col3:
             st.markdown("""
             <div class="metric-card">
-                <h3>📧 Email Automation</h3>
+                <h3> Email Automation</h3>
                 <p>One-click shortlist/rejection emails with professional templates</p>
             </div>
             """, unsafe_allow_html=True)
@@ -188,7 +188,7 @@ def show_home():
         # Getting Started Guide for Admin
         st.markdown("""
         <div class="getting-started">
-            <h3>🚀 Getting Started — Admin Guide</h3>
+            <h3>Getting Started — Admin Guide</h3>
             <div class="step-item">
                 <div class="step-num">1</div>
                 <div class="step-content">
@@ -220,20 +220,20 @@ def show_home():
         </div>
         """, unsafe_allow_html=True)
     else:
-        st.info("📋 **Welcome, Candidate!** — Use the sidebar to navigate to the **Candidate Portal** to upload your resume and view results.")
+        st.info("**Welcome, Candidate!** — Use the sidebar to navigate to the **Candidate Portal** to upload your resume and view results.")
 
         col1, col2 = st.columns(2)
         with col1:
             st.markdown("""
             <div class="metric-card">
-                <h3>📤 Upload Resume</h3>
+                <h3> Upload Resume</h3>
                 <p>Upload your PDF or DOCX resume. Our AI will extract your skills, experience, and education automatically</p>
             </div>
             """, unsafe_allow_html=True)
         with col2:
             st.markdown("""
             <div class="metric-card">
-                <h3>🔍 Smart Analysis</h3>
+                <h3>Smart Analysis</h3>
                 <p>View your extracted profile with skill tags, experience timeline, and education details</p>
             </div>
             """, unsafe_allow_html=True)
@@ -241,7 +241,7 @@ def show_home():
         # Getting Started Guide for Candidate
         st.markdown("""
         <div class="getting-started">
-            <h3>🚀 Getting Started — Candidate Guide</h3>
+            <h3> Getting Started — Candidate Guide</h3>
             <div class="step-item">
                 <div class="step-num">1</div>
                 <div class="step-content">
@@ -269,7 +269,7 @@ def show_home():
     # Footer
     st.markdown("""
     <div class="app-footer">
-        <p>AI Resume Analyzer v1.0.0 · Built with ❤️ using FastAPI + Streamlit + OpenAI</p>
+        <p>AI Resume Analyzer v1.0.0 · Built with  using FastAPI + Streamlit + OpenAI</p>
     </div>
     """, unsafe_allow_html=True)
 
